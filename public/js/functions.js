@@ -6,11 +6,15 @@ function doThis(){
     console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
       var response = JSON.parse(req.responseText);
-      console.log(response[0]);
-      console.log(response[1]);
+      //console.log(response[0]);
+      //console.log(response[1]);
       //var length = Object.keys(response).length;
-      var keys = Object.keys(response);
+      var keys = Object.keys(response[0]);
       console.log("Keys: " + keys);
+      console.log(keys.length);
+      console.log(keys[0]);
+      console.log(response[0].id);
+      console.log(response.length);
       var table = document.createElement("table");
       table.setAttribute("id", "myTable");
       var tablebody = document.createElement("tbody");
@@ -19,16 +23,26 @@ function doThis(){
       header.setAttribute("id", "TH");
       table.appendChild(header);
       var row = header.insertRow(0);
-      for (var value in keys){
+      for (var i = 0; i < keys.length; i++){
         var cell = document.createElement("td");
-        var cellText = document.createTextNode('' + value);
+        var cellText = document.createTextNode('' + keys[i]);
         cell.appendChild(cellText);
         row.appendChild(cell);
       }
       header.appendChild(row);
       //create table body
-
-
+      for (var i = 0; i < response.length; i++){
+        var row = document.createElement("tr");
+        for (var j = 0; j< keys.length; j++){
+  		      var cell = document.createElement("td");
+  		      cell.style.border = "2px";
+  		      var cellText = document.createTextNode(response[i][j]);
+    		    cell.appendChild(cellText);
+  		    row.appendChild(cell);
+        }
+      tablebody.appendChild(row);
+      }
+      table.appendChild(tablebody);
       var insert = document.getElementById('theTable');
       insert.appendChild(table);
     }

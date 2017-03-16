@@ -14,7 +14,7 @@ app.engine('handlebars', handlebars.engine);
 
 app.get("/", function(req, res, next){
   var context = {};
-  mysql.pool.query('SELECT * FROM homework', function(err, rows, fields){
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
     if(err){
       next(err);
       return;
@@ -27,7 +27,7 @@ app.get("/", function(req, res, next){
 
 app.get("/log", function(req, res, next){
   var context = {};
-  mysql.pool.query('SELECT * FROM homework', function(err, rows, fields){
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
     if(err){
       next(err);
       return;
@@ -42,12 +42,13 @@ app.get("/log", function(req, res, next){
 
 app.get('/reset-table',function(req,res,next){
   var context = {};
-  mysql.pool.query("DROP TABLE IF EXISTS homework", function(err){
-    var createString = "CREATE TABLE homework(" +
-    "id INT PRIMARY KEY AUTO_INCREMENT," +
-    "name VARCHAR(255) NOT NULL," +
-    "done BOOLEAN," +
-    "due DATE)";
+  mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){
+    "id INT PRIMARY KEY AUTO_INCREMENT,"+
+    "name VARCHAR(255) NOT NULL,"+
+    "reps INT,"+
+    "weight INT,"+
+    "date DATE,"+
+    "lbs BOOLEAN)";
     mysql.pool.query(createString, function(err){
       context.results = "Table reset";
       res.render('home',context);
