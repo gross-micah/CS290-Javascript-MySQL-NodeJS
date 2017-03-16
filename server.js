@@ -39,6 +39,21 @@ app.get("/log", function(req, res, next){
     res.send(context.results);
   });
 });
+//NEXT TO DO
+app.get("/insert", function(req, res, next){
+  var context = {};
+  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(rows);
+    //console.log(context.results);
+    //console.log("I got a GET request");
+    res.setHeader('content-type', 'text/javascript');
+    res.send(context.results);
+  });
+});
 
 app.get('/reset-table',function(req,res,next){
   var context = {};

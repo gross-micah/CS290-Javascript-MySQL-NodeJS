@@ -15,6 +15,7 @@ function doThis(){
       console.log(keys[0]);
       console.log(response[0].id);
       console.log(response.length);
+      console.log(response[0].name);
       var table = document.createElement("table");
       table.setAttribute("id", "myTable");
       var tablebody = document.createElement("tbody");
@@ -23,7 +24,7 @@ function doThis(){
       header.setAttribute("id", "TH");
       table.appendChild(header);
       var row = header.insertRow(0);
-      for (var i = 0; i < keys.length; i++){
+      for (var i = 1; i < keys.length; i++){
         var cell = document.createElement("td");
         var cellText = document.createTextNode('' + keys[i]);
         cell.appendChild(cellText);
@@ -31,15 +32,29 @@ function doThis(){
       }
       header.appendChild(row);
       //create table body
-      for (var i = 0; i < response.length; i++){
+      /*for (var i = 0; i < response.length; i++){
         var row = document.createElement("tr");
-        for (var j = 0; j< keys.length; j++){
+        for (var j = 1; j< keys.length; j++){
   		      var cell = document.createElement("td");
   		      cell.style.border = "2px";
-  		      var cellText = document.createTextNode(response[i][j]);
+  		      var cellText = document.createTextNode(response[i]);
     		    cell.appendChild(cellText);
   		    row.appendChild(cell);
-        }
+        }*/
+        for (var i = 0; i < response.length; i++){
+          var row = document.createElement("tr");
+          for (var value in response[i]){
+            if (response[i][value] != "id")
+            {
+              console.log(response[i][value]);
+    		      var cell = document.createElement("td");
+    		      cell.style.border = "2px";
+    		      var cellText = document.createTextNode(response[i][value]);
+      		    cell.appendChild(cellText);
+    		      row.appendChild(cell);
+            }
+          }
+
       tablebody.appendChild(row);
       }
       table.appendChild(tablebody);
@@ -52,4 +67,8 @@ function doThis(){
   });
   req.send(null);
   console.log("it at least tried");
+};
+
+function insert(){
+
 };
