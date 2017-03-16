@@ -35,6 +35,7 @@ app.get("/log", function(req, res, next){
     context.results = JSON.stringify(rows);
     console.log(context.results);
     console.log("I got a GET request");
+    res.send(context.results);
   });
 });
 

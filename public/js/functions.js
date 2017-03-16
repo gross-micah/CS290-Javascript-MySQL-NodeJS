@@ -2,10 +2,10 @@ function doThis(){
   var req = new XMLHttpRequest();
   var payload = {};
   req.open("GET", "/log", true);
-  req.addEventListener('load', function(){
+  req.onreadystatechange = function(){
     console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
-			var response = JSON.parse(req.responseText);
+      var response = req.responseText;
       //var length = Object.keys(response).length;
       var keys = Object.keys(response);
       var table = document.createElement("table");
@@ -23,13 +23,16 @@ function doThis(){
         row.appendChild(cell);
       }
       header.appendChild(row);
-      var insert = document.getElementById('theTable').textContent;
+      //create table body
+
+
+      var insert = document.getElementById('theTable');
       insert.appendChild(table);
-		}
-		else {
-			console.log("Error in network request:" + req.statusText);
-		}
-  });
+    }
+    else {
+      console.log("Error in network request:" + req.statusText);
+    }
+  }
   req.send(null);
   console.log("it at least tried");
 };
