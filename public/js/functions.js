@@ -43,6 +43,11 @@ function buildTable(){
   req.send(null);
 };
 
+function validate(){
+  if (document.getElementById("fname").value) insert();
+  else alert("Name required to add to database.");
+};
+
 function insert(){
   var req = new XMLHttpRequest();
   var form = document.forms[0];
