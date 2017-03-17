@@ -3,10 +3,11 @@ var mysql = require('./dbcon.js');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var request = require('request');
+var myParser = require("body-parser");
 var async = require('async');
 app.set('view engine', 'handlebars');
 app.set('port', Number(process.env.PORT || 3000));
-
+app.use(myParser.json());
 app.use(express.static('public'));
 app.engine('handlebars', handlebars.engine);
 
@@ -40,17 +41,22 @@ app.get("/log", function(req, res, next){
   });
 });
 //NEXT TO DO
-app.get("/insert", function(req, res, next){
+app.post("/insert", function(req, res, next){
   var context = {};
-  mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+  var incoming = {};
+  incoming.sentData = req.query.name;
+  console.log("request body");
+  console.log(req.body);
+  console.log(req.body["name"]);
+  console.log(req.body["reps"]);
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [req.body["name"], req.body["reps"], req.body["weight"], req.body["date"], req.body["lbs"]], function(err, result){
     if(err){
       next(err);
       return;
     }
-    context.results = JSON.stringify(rows);
-    //console.log(context.results);
-    //console.log("I got a GET request");
+    context.results = JSON.stringify(result);
     res.setHeader('content-type', 'text/javascript');
+    console.log(context.results);
     res.send(context.results);
   });
 });

@@ -1,62 +1,36 @@
 function doThis(){
   var req = new XMLHttpRequest();
-  var payload = {};
   req.open("GET", "/log", true);
   req.addEventListener('load', function(){
-    console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
       var response = JSON.parse(req.responseText);
-      //console.log(response[0]);
-      //console.log(response[1]);
-      //var length = Object.keys(response).length;
       var keys = Object.keys(response[0]);
-      console.log("Keys: " + keys);
-      console.log(keys.length);
-      console.log(keys[0]);
-      console.log(response[0].id);
-      console.log(response.length);
-      console.log(response[0].name);
       var table = document.createElement("table");
       table.setAttribute("id", "myTable");
       var tablebody = document.createElement("tbody");
+      tablebody.setAttribute("id", "tbody");
       //create table header
       var header = table.createTHead();
       header.setAttribute("id", "TH");
       table.appendChild(header);
       var row = header.insertRow(0);
-      for (var i = 1; i < keys.length; i++){
+      for (var i = 0; i < keys.length; i++){
         var cell = document.createElement("td");
         var cellText = document.createTextNode('' + keys[i]);
         cell.appendChild(cellText);
         row.appendChild(cell);
       }
       header.appendChild(row);
-      //create table body
-      /*for (var i = 0; i < response.length; i++){
+      for (var i = 0; i < response.length; i++){
         var row = document.createElement("tr");
-        for (var j = 1; j< keys.length; j++){
-  		      var cell = document.createElement("td");
-  		      cell.style.border = "2px";
-  		      var cellText = document.createTextNode(response[i]);
-    		    cell.appendChild(cellText);
+        for (var value in response[i]){
+          var cell = document.createElement("td");
+    	    var cellText = document.createTextNode(response[i][value]);
+    		  cell.appendChild(cellText);
   		    row.appendChild(cell);
-        }*/
-        for (var i = 0; i < response.length; i++){
-          var row = document.createElement("tr");
-          for (var value in response[i]){
-            if (response[i][value] != "id")
-            {
-              console.log(response[i][value]);
-    		      var cell = document.createElement("td");
-    		      cell.style.border = "2px";
-    		      var cellText = document.createTextNode(response[i][value]);
-      		    cell.appendChild(cellText);
-    		      row.appendChild(cell);
-            }
-          }
-
-      tablebody.appendChild(row);
+        }
       }
+      tablebody.appendChild(row);
       table.appendChild(tablebody);
       var insert = document.getElementById('theTable');
       insert.appendChild(table);
@@ -66,9 +40,46 @@ function doThis(){
     }
   });
   req.send(null);
-  console.log("it at least tried");
 };
 
 function insert(){
+  var req = new XMLHttpRequest();
+  var form = document.forms[0];
+  if (document.getElementById("fus").checked) var bool = "1";
+  else var bool = "0";
+  var data = {
+      "name":document.getElementById("fname").value,
+      "reps":document.getElementById("freps").value,
+      "weight":document.getElementById("fweight").value,
+      "date":document.getElementById("fdate").value,
+      "lbs":bool
+  };
+  console.log(data);
+  req.open("POST", "/insert", true);
+  req.setRequestHeader("content-type", "application/json;charset=UTF-8");
+  req.addEventListener('load', function(){
+    console.log("listener worked");
+    if(req.status >= 200 && req.status < 400){
+      var response = JSON.parse(req.responseText);
+      var keys = Object.keys(response[0]);
+      var tbody = document.getElementById('tbody');
+      var row = document.createElement("tr");
+      for (var value in response[0]){
+        console.log(response[0][value]);
+        var cell = document.createElement("td");
+        cell.style.border = "2px";
+        var cellText = document.createTextNode(response[0][value]);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
+      tbody.appendChild(row);
 
+    }
+    else {
+      console.log("Error in network request:" + req.statusText);
+    }
+  });
+  req.send(JSON.stringify(data));
+  console.log("it at least tried");
+  event.preventDefault();
 };

@@ -4,3 +4,10 @@ body {
 table {
   background-color: white;
 }
+table tr td:first-child {
+  display: none;
+}
+
+#hide {
+  visibility: collapse;
+}
