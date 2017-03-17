@@ -21,6 +21,7 @@ function doThis(){
         row.appendChild(cell);
       }
       header.appendChild(row);
+      console.log("response.length is " + response.length);
       for (var i = 0; i < response.length; i++){
         var row = document.createElement("tr");
         for (var value in response[i]){
@@ -29,8 +30,8 @@ function doThis(){
     		  cell.appendChild(cellText);
   		    row.appendChild(cell);
         }
+        tablebody.appendChild(row);
       }
-      tablebody.appendChild(row);
       table.appendChild(tablebody);
       var insert = document.getElementById('theTable');
       insert.appendChild(table);
@@ -61,7 +62,6 @@ function insert(){
     console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
       var response = JSON.parse(req.responseText);
-      var keys = Object.keys(response[0]);
       var tbody = document.getElementById('tbody');
       var row = document.createElement("tr");
       for (var value in response[0]){
