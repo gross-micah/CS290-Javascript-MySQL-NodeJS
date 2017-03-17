@@ -43,13 +43,19 @@ app.get("/log", function(req, res, next){
 //NEXT TO DO
 app.post("/insert", function(req, res, next){
   var context = {};
-  var incoming = {};
+  var incoming = req.body;
+  var input = [];
+  for (key in incoming){
+    input.push(incoming[key]);
+  }
+  console.log("Input:");
+  console.log(input);
   incoming.sentData = req.query.name;
   console.log("request body");
   console.log(req.body);
   console.log(req.body["name"]);
   console.log(req.body["reps"]);
-  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [req.body["name"], req.body["reps"], req.body["weight"], req.body["date"], req.body["lbs"]], function(err, result){
+  mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [input], function(err, result){
     if(err){
       next(err);
       return;
