@@ -1,4 +1,4 @@
-function doThis(){
+function buildTable(){
   var req = new XMLHttpRequest();
   req.open("GET", "/log", true);
   req.addEventListener('load', function(){
@@ -61,19 +61,8 @@ function insert(){
   req.addEventListener('load', function(){
     console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
-      var response = JSON.parse(req.responseText);
-      var tbody = document.getElementById('tbody');
-      var row = document.createElement("tr");
-      for (var value in response[0]){
-        console.log(response[0][value]);
-        var cell = document.createElement("td");
-        cell.style.border = "2px";
-        var cellText = document.createTextNode(response[0][value]);
-        cell.appendChild(cellText);
-        row.appendChild(cell);
-      }
-      tbody.appendChild(row);
-
+      document.getElementById("theTable").innerHTML = "";
+      buildTable();
     }
     else {
       console.log("Error in network request:" + req.statusText);

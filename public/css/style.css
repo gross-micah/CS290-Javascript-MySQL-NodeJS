@@ -1,8 +1,9 @@
 body {
   background-color: #6B8E23;
 }
-table {
+table, th, td {
   background-color: white;
+  border: 1px solid black;
 }
 table tr td:first-child {
   display: none;
