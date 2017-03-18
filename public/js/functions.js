@@ -1,4 +1,26 @@
+function deleteRow(id){
+  var req = new XMLHttpRequest();
+  req.open("POST", "/delete", true);
+  req.setRequestHeader("content-type", "application/json;charset=UTF-8");
+  req.addEventListener('load', function(){
+    if(req.status >= 200 && req.status < 400){
+      buildTable();
+    }
+    else {
+      console.log("Error in network request:" + req.statusText);
+    }
+  });
+  var data = {"id": id};
+  console.log(JSON.stringify(data));
+  req.send(JSON.stringify(data));
+};
+
+function updateRow(id){
+  console.log("Update " + id);
+};
+
 function buildTable(){
+  document.getElementById("theTable").innerHTML = "";
   var req = new XMLHttpRequest();
   req.open("GET", "/log", true);
   req.addEventListener('load', function(){
@@ -21,7 +43,7 @@ function buildTable(){
         row.appendChild(cell);
       }
       header.appendChild(row);
-      console.log("response.length is " + response.length);
+      //create table body
       for (var i = 0; i < response.length; i++){
         var row = document.createElement("tr");
         for (var value in response[i]){
@@ -30,6 +52,26 @@ function buildTable(){
     		  cell.appendChild(cellText);
   		    row.appendChild(cell);
         }
+        var cell = document.createElement("td");
+        var button = document.createElement("input");
+        button.type = "button";
+        button.value = "delete";
+        button.setAttribute("ID", "D" + response[i].id);
+        button.onclick = function() {
+          deleteRow(this.id);
+        };
+        cell.appendChild(button);
+        row.appendChild(cell);
+        var cell2 = document.createElement("td");
+        var button2 = document.createElement("input");
+        button2.type = "button";
+        button2.value = "update";
+        button2.setAttribute("ID", "U" + response[i].id);
+        button2.onclick = function(evt) {
+          updateRow(this.id);
+        };
+        cell2.appendChild(button2);
+        row.appendChild(cell2);
         tablebody.appendChild(row);
       }
       table.appendChild(tablebody);
@@ -60,13 +102,11 @@ function insert(){
       "date":document.getElementById("fdate").value,
       "lbs":bool
   };
-  console.log(data);
   req.open("POST", "/insert", true);
   req.setRequestHeader("content-type", "application/json;charset=UTF-8");
   req.addEventListener('load', function(){
     console.log("listener worked");
     if(req.status >= 200 && req.status < 400){
-      document.getElementById("theTable").innerHTML = "";
       buildTable();
     }
     else {

@@ -67,7 +67,26 @@ app.post("/insert", function(req, res, next){
   });
 });
 
-app.get('/reset-table',function(req,res,next){
+app.post("/delete", function(req, res, next){
+  var context = {};
+  var incoming = req.body;
+  var id = "" + incoming.id;
+  console.log(id);
+  id = id.substring(1);
+  id = parseInt(id, 10);
+  console.log(id);
+  mysql.pool.query("DELETE FROM workouts WHERE id=?", [id], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(result);
+    console.log(context.results);
+    res.send(context.results);
+  });
+});
+
+/*app.get('/reset-table',function(req,res,next){
   var context = {};
   mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){
     "id INT PRIMARY KEY AUTO_INCREMENT,"+
@@ -82,6 +101,7 @@ app.get('/reset-table',function(req,res,next){
     })
   });
 });
+*/
 
 app.use(function(req,res){
   res.status(404);
