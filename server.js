@@ -34,13 +34,11 @@ app.get("/log", function(req, res, next){
       return;
     }
     context.results = JSON.stringify(rows);
-    //console.log(context.results);
-    //console.log("I got a GET request");
     res.setHeader('content-type', 'text/javascript');
     res.send(context.results);
   });
 });
-//NEXT TO DO
+
 app.post("/insert", function(req, res, next){
   var context = {};
   var incoming = req.body;
@@ -48,13 +46,7 @@ app.post("/insert", function(req, res, next){
   for (key in incoming){
     input.push(incoming[key]);
   }
-  console.log("Input:");
-  console.log(input);
   incoming.sentData = req.query.name;
-  console.log("request body");
-  console.log(req.body);
-  console.log(req.body["name"]);
-  console.log(req.body["reps"]);
   mysql.pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?)", [input], function(err, result){
     if(err){
       next(err);
@@ -71,10 +63,8 @@ app.post("/delete", function(req, res, next){
   var context = {};
   var incoming = req.body;
   var id = "" + incoming.id;
-  console.log(id);
   id = id.substring(1);
   id = parseInt(id, 10);
-  console.log(id);
   mysql.pool.query("DELETE FROM workouts WHERE id=?", [id], function(err, result){
     if(err){
       next(err);
@@ -83,6 +73,44 @@ app.post("/delete", function(req, res, next){
     context.results = JSON.stringify(result);
     console.log(context.results);
     res.send(context.results);
+  });
+});
+
+app.post("/update", function(req, res, next){
+  var context = {};
+  var incoming = req.body;
+  var id = "" + incoming.id;
+  id = id.substring(1);
+  id = parseInt(id, 10);
+  console.log("it's working to here");
+  console.log(id);
+  mysql.pool.query("SELECT * FROM workouts WHERE id=?", [id], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(result);
+    res.send(context.results);
+    //res.render('update', context.results);
+  });
+});
+
+app.post("/sendUpdate", function(req, res, next){
+  var context = {};
+  var incoming = req.body;
+  var input = [];
+  for (key in incoming){
+    input.push(incoming[key]);
+  }
+  console.log(input);
+  mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=?, WHERE id=?", [input], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
+    context.results = JSON.stringify(result);
+    res.send(context.results);
+    //res.render('update', context.results);
   });
 });
 

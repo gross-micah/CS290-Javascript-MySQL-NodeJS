@@ -13,6 +13,27 @@
   {{{body}}}
   <div id="theTable">
   </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <form id= "updateForm" name="add" onSubmit=()>
+        <label for="name">Name:</label>
+        <input id="uname" type="text" name="name">
+        <label for="id">Reps:</label>
+        <input id="ureps" type="number" name="reps">
+        <label for="weight">Weight:</label>
+        <input id="uweight" type="number" name="weight">
+        <label for="date">Date:</label>
+        <input id="udate" type="date" name="date">
+        Type:<input id="uus" type="radio" name="units" value="lbs">
+        <label for="uus">lbs</label>
+        <input id="uuk" type="radio" name="units" value="kgs">
+        <label for="uuk">kgs</label>
+        <input id="updateEntry" type="submit" value="submit">
+      </form>
+    </div>
+  </div>
+
   <script type="text/javascript" src="js/functions.js"></script>
 </body>
 </html>
